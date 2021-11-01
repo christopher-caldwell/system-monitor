@@ -1,0 +1,48 @@
+{
+  "name": "utilization",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write src",
+    "lint": "eslint --ext .tsx,.ts,.js src",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "nodemon --exec \"yarn start\" --ext .ts",
+    "pre-build": "sh scripts/pre-build.sh",
+    "build": "webpack --config webpack.config.ts",
+    "analyze": "export ANALYZE=true && yarn build",
+    "build:image": "docker build . -t thatdevdude/system-api",
+    "run:image": "docker run -p 5000:5000 -d thatdevdude/system-api"
+  },
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-graphql": "^0.9.0",
+    "koa-mount": "^4.0.0",
+    "os-utils": "^0.0.14",
+    "systeminformation": "^5.9.9"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa-graphql": "^0.8.5",
+    "@types/koa-mount": "^4.0.1",
+    "@types/koa__router": "^8.0.8",
+    "@types/node": "^16.11.6",
+    "@types/os-utils": "^0.0.1",
+    "@types/webpack-bundle-analyzer": "^4.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.0.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.4.1",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.3.0",
+    "tsconfig-paths": "^3.10.1",
+    "typescript": "^4.3.5",
+    "webpack": "^5.59.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.1"
+  }
+}

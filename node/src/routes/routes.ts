@@ -6,5 +6,6 @@ export enum Routes {
   MemoryCapacity = '/memory/capacity',
   GpuUsage = '/gpu/usage',
   GpuName = '/gpu/name',
-  GpuTemp = '/gpu/temp'
+  GpuTemp = '/gpu/temp',
+  GpuCapacity = '/gpu/capacity'
 }

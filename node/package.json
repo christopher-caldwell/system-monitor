@@ -16,6 +16,7 @@
     "run:image": "docker run -p 5000:5000 -d thatdevdude/system-api"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@koa/router": "^10.1.1",
     "koa": "^2.13.4",
     "koa-graphql": "^0.9.0",
@@ -27,6 +28,7 @@
     "@types/koa": "^2.13.4",
     "@types/koa-graphql": "^0.8.5",
     "@types/koa-mount": "^4.0.1",
+    "@types/koa__cors": "^3.0.3",
     "@types/koa__router": "^8.0.8",
     "@types/node": "^16.11.6",
     "@types/os-utils": "^0.0.1",

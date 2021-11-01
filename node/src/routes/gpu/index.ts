@@ -2,7 +2,8 @@ import { exec } from 'child_process'
 import { promisify } from 'util'
 const execAsync = promisify(exec)
 
-const command = 'sudo powermetrics --samplers gpu_power -i500 -n1'
+const usageCommand = 'sudo powermetrics --samplers gpu_power -i500 -n1'
+const nameCommand = 'system_profiler SPDisplaysDataType'
 
 const parseUtilizationPercentage = (output: string) =>
   parseFloat(
@@ -14,22 +15,34 @@ const parseUtilizationPercentage = (output: string) =>
   )
 
 const parseGpuName = (output: string) =>
-  parseFloat(
+  output
+    .split('\n')
+    .find(block => block.includes('Chipset Model'))
+    ?.split(':')?.[1]
+    ?.trim() || '-'
+
+const parseGpuCapacity = (output: string) =>
+  parseInt(
     output
       .split('\n')
-      .find(block => block.includes('GPU 0 name'))
-      ?.split(' ')?.[1]
+      .find(block => block.includes('VRAM'))
+      ?.split(':')?.[1]
       ?.trim() || '-'
   )
 
 export const getGpuUtilization = async () => {
-  const { stdout } = await execAsync(command)
+  const { stdout } = await execAsync(usageCommand)
   return parseUtilizationPercentage(stdout)
 }
 
 export const getGpuName = async () => {
-  const { stdout } = await execAsync(command)
+  const { stdout } = await execAsync(nameCommand)
   return parseGpuName(stdout)
+}
+
+export const getGpuCapacity = async () => {
+  const { stdout } = await execAsync(nameCommand)
+  return parseGpuCapacity(stdout)
 }
 
 // const output = `stdout: Machine model: MacBookPro16,2
@@ -74,3 +87,37 @@ export const getGpuName = async () => {
 // GPU 0 DC6 Exit Reason - Cursor     : 0 (0.00/second)
 // GPU 0 DC6 Exit Reason - Render     : 0 (0.00/second)
 // GPU 0 FPS                          : 0`
+
+// Graphics/Displays:
+
+//     Intel Iris Plus Graphics:
+
+//       Chipset Model: Intel Iris Plus Graphics
+//       Type: GPU
+//       Bus: Built-In
+//       VRAM (Dynamic, Max): 1536 MB
+//       Vendor: Intel
+//       Device ID: 0x8a53
+//       Revision ID: 0x0007
+//       Metal Family: Supported, Metal GPUFamily macOS 2
+//       Displays:
+//         Color LCD:
+//           Display Type: Built-In Retina LCD
+//           Resolution: 2560 x 1600 Retina
+//           Framebuffer Depth: 30-Bit Color (ARGB2101010)
+//           Main Display: Yes
+//           Mirror: Off
+//           Online: Yes
+//           Automatically Adjust Brightness: Yes
+//           Connection Type: Internal
+//         VS248:
+//           Resolution: 1920 x 1080 (1080p FHD - Full High Definition)
+//           UI Looks like: 1920 x 1080 @ 60.00Hz
+//           Framebuffer Depth: 30-Bit Color (ARGB2101010)
+//           Display Serial Number: F8LMQS019282
+//           Mirror: Off
+//           Online: Yes
+//           Rotation: Supported
+//           Automatically Adjust Brightness: Yes
+//           Connection Type: DVI or HDMI
+//           Adapter Firmware Version:  b.5d

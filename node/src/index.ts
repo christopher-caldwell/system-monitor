@@ -1,4 +1,5 @@
 import Koa from 'koa'
+import cors from '@koa/cors'
 
 import { router } from '@/routes'
 
@@ -17,7 +18,7 @@ app.use(async (ctx, next) => {
     ctx.body = error.message
   }
 })
-
+app.use(cors())
 
 app.use(router.routes()).use(router.allowedMethods())
 

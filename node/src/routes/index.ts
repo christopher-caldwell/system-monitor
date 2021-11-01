@@ -2,7 +2,7 @@ import Router from '@koa/router'
 
 import { Routes } from '@/routes/routes'
 import { getCpuUsage, getCpuName } from './cpu'
-import { getGpuName, getGpuUtilization } from './gpu'
+import { getGpuName, getGpuUtilization, getGpuCapacity } from './gpu'
 
 export const router = new Router()
 
@@ -33,4 +33,7 @@ router.get(Routes.GpuTemp, ctx => {
 })
 router.get(Routes.GpuUsage, async ctx => {
   ctx.body = await getGpuUtilization()
+})
+router.get(Routes.GpuCapacity, async ctx => {
+  ctx.body = await getGpuCapacity()
 })

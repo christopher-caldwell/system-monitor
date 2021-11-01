@@ -1,26 +1,36 @@
-const { exec } = require('child_process')
-const promisify = require('util').promisify
+import { exec } from 'child_process'
+import { promisify } from 'util'
 const execAsync = promisify(exec)
 
 const command = 'sudo powermetrics --samplers gpu_power -i500 -n1'
 
-const parseUtilizationPercentage = (output) =>
+const parseUtilizationPercentage = (output: string) =>
   parseFloat(
     output
       .split('\n')
-      .find((block) => block.includes('GPU 0 GPU Busy'))
+      .find(block => block.includes('GPU 0 GPU Busy'))
       ?.split(':')?.[1]
-      ?.trim() || '0',
+      ?.trim() || '0'
   )
 
-const getGpuUtilization = async () => {
+const parseGpuName = (output: string) =>
+  parseFloat(
+    output
+      .split('\n')
+      .find(block => block.includes('GPU 0 name'))
+      ?.split(' ')?.[1]
+      ?.trim() || '-'
+  )
+
+export const getGpuUtilization = async () => {
   const { stdout } = await execAsync(command)
-  console.log(parseUtilizationPercentage(stdout))
+  return parseUtilizationPercentage(stdout)
 }
 
-setInterval(() => {
-  getGpuUtilization()
-}, [1000])
+export const getGpuName = async () => {
+  const { stdout } = await execAsync(command)
+  return parseGpuName(stdout)
+}
 
 // const output = `stdout: Machine model: MacBookPro16,2
 // SMC version: Unknown

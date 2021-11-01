@@ -1,4 +1,5 @@
 import osUtils from 'os-utils'
+import os from 'os'
 
 export const getCpuUsage = async (): Promise<number> => {
   return new Promise((resolve, reject) => {
@@ -6,4 +7,8 @@ export const getCpuUsage = async (): Promise<number> => {
       return resolve(usage)
     })
   })
+}
+
+export const getCpuName = () => {
+  return os.cpus()[0].model
 }
